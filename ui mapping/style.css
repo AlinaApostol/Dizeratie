@@ -1,0 +1,23 @@
+html {
+  font-family: sans-serif;
+}
+
+.contentInfo {
+  max-width: 100%;
+  min-width: 100%;
+  width: 100%;
+  height: 250px;
+  color: #333;
+  margin-top: 10px;
+  border-color: #eee;
+}
+
+.changed {
+  padding-top: 10px;
+  padding-bottom: 10px; 
+}
+
+.file-loading {
+  border: 1px solid #eee;
+  margin-bottom: 10px;
+}

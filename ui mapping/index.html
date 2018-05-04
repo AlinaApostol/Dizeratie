@@ -1,0 +1,57 @@
+<!doctype html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+
+        <title>CCDA to FHIR</title>
+        <meta name="description" content="CCDA to FHIR">
+        <meta name="author" content="AlinaApostol">
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link rel="stylesheet" href="./style.css">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>        
+        <script src="./index.js"></script>
+
+    </head>
+
+    <body>
+        <div ng-app="appMapping" ng-controller="myCtrl">
+            <form enctype="multipart/form-data">
+                <div class="jumbotron text-center changed">
+                    <h1>Mapping system CCDA to FHIR</h1>
+                    <p>Transform CCDA to FHIR</p> 
+                </div>
+
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-6" id="ccdaGroup">
+                            <b>Input: CCDA</b>
+                            <hr>
+                            <div class="file-loading">
+                                <input type="file" id="importFile" onchange="angular.element(this).scope().uploadXmlFile()"/>
+                            </div>
+    
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a>CCDA</a></li>
+                            </ul>
+                            <div id="contCCDA"></div>
+
+                        </div>
+                        <div class="col-sm-6">
+                            <b>Output: FHIR bundled resources</b>
+                            <hr>
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a>JSON</a></li>
+                            </ul>
+                            <div id="contJSON"></div>                         
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>

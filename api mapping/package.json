@@ -1,0 +1,10 @@
+{
+  "name": "CCDAtoFHIRconvertor",
+  "version": "1",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "body-parser-xml": "^1.1.0",
+    "cors": "^2.8.4",
+    "express": "^4.16.2"
+  }
+}
