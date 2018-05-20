@@ -24,6 +24,9 @@ app.controller("myCtrl", function($scope, $http) {
                 headers: { "Content-Type": 'application/xml' }
             }).then( function(response) {
                     var preview = document.querySelector('#contJSON');
+                    while(preview.firstChild) {
+                        preview.removeChild(preview.firstChild);
+                    }
                     var textc = document.createElement('textarea');
                     textc.textContent = JSON.stringify(response.data.entry, undefined, 2);
                     preview.appendChild(textc);
