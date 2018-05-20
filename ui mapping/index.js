@@ -16,13 +16,6 @@ app.controller("myCtrl", function($scope, $http) {
             textc.textContent = $scope.data;
             preview.appendChild(textc);
             $('#contCCDA textarea').addClass('contentInfo');
-            
-            // var postQuery = {
-            //     method: 'POST',
-            //     url: 'http://127:0:0.1:7202/api/document',
-            //     data: $scope.contentXML,
-            //     headers: { "Content-Type": 'text/plain' }
-            // };
 
             $http({
                 method: 'POST',
