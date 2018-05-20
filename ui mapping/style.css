@@ -21,3 +21,11 @@ html {
   border: 1px solid #eee;
   margin-bottom: 10px;
 }
+
+#contJSON textarea {
+  height: 400px;
+}
+
+#contCCDA textarea {
+  height: 400px;
+}

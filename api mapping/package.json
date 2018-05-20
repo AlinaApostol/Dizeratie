@@ -2,9 +2,13 @@
   "name": "CCDAtoFHIRconvertor",
   "version": "1",
   "dependencies": {
+    "async": "^2.6.0",
     "body-parser": "^1.18.2",
     "body-parser-xml": "^1.1.0",
+    "cda-fhir": "^2.0.0",
     "cors": "^2.8.4",
-    "express": "^4.16.2"
+    "express": "^4.16.2",
+    "object-to-xml": "^1.1.0",
+    "xmlserializer": "^0.6.1"
   }
 }
