@@ -89,13 +89,13 @@ var isInContextOf = function (oids) {
     var inContext;
     if (_.isArray(oids)) {
         inContext = _.findLast(proto.control, function (triplet) {
-            return _.any(triplet.templateId, function (value) {
-                return _.contains(oids, value);
+            return _.some(triplet.templateId, function (value) {
+                return _.includes(oids, value);
             });
         });
     } else {
         inContext = _.findLast(proto.control, function (triplet) {
-            return _.contains(triplet.templateId, oids);
+            return _.includes(triplet.templateId, oids);
         });
     }
     return inContext || false;
@@ -585,7 +585,7 @@ Organization.prototype = proto;
 var AssignedEntity = function (resource, templateId) {
     var patient = findPatient(proto.bundle);
 
-    if (templateId && _.contains(templateId, '2.16.840.1.113883.10.20.22.4.87')) {
+    if (templateId && _.includes(templateId, '2.16.840.1.113883.10.20.22.4.87')) {
         //Insurance Company Information
         var coverage = resource;
         this._self = {
@@ -610,7 +610,7 @@ var AssignedEntity = function (resource, templateId) {
             }
         };
         this._self.prototype = proto;
-    } else if (templateId && _.contains(templateId, '2.16.840.1.113883.10.20.22.4.88')) {
+    } else if (templateId && _.includes(templateId, '2.16.840.1.113883.10.20.22.4.88')) {
         //Guarantor Information... The person responsible for the final bill.
         var contact = resource;
         this._self = {
@@ -1136,10 +1136,10 @@ var ParticipantRole = function (resource, contextId) {
         }
     };
 
-    if (contextId && _.contains(contextId, '2.16.840.1.113883.10.20.22.4.89')) { //Covered Party Participant
+    if (contextId && _.includes(contextId, '2.16.840.1.113883.10.20.22.4.89')) { //Covered Party Participant
         claim = resource;
         //TODO process claim patient (it's defaulted to patient now)
-    } else if (contextId && _.contains(contextId, '2.16.840.1.113883.10.20.22.4.90')) { //Policy Holder
+    } else if (contextId && _.includes(contextId, '2.16.840.1.113883.10.20.22.4.90')) { //Policy Holder
         claim = resource;
         //TODO process claim.coverage.subscriber (it's defaulted to patient now)
     }
@@ -1605,7 +1605,7 @@ var Observation = function (classCode, resource, param1, bundle, composition) {
                         param1.code = {
                             'coding': [makeCode(node)]
                         };
-                        if (familyMemberHistory && !_.contains(ensureProperty.call(familyMemberHistory, 'condition', true), param1)) {
+                        if (familyMemberHistory && !_.includes(ensureProperty.call(familyMemberHistory, 'condition', true), param1)) {
                             familyMemberHistory.condition.push(param1);
                         }
                     }
@@ -2665,7 +2665,7 @@ var Organizer = function () {
     };
 
     this.subject = function (node) {
-        if (_.contains(templateId, '2.16.840.1.113883.10.20.22.4.45')) {
+        if (_.includes(templateId, '2.16.840.1.113883.10.20.22.4.45')) {
 
             // Decided not to process FamilyMemberHistory
             proto.control.push(new Triplet(node, dummy, templateId));
@@ -2690,17 +2690,17 @@ var Organizer = function () {
         var functionaStatusResultOrganizer = ['2.16.840.1.113883.10.20.22.4.66'];
         var resultsOrganizer = ['2.16.840.1.113883.10.20.22.2.3', '2.16.840.1.113883.10.20.22.2.3.1'];
         var functionalStatusSection = ['2.16.840.1.113883.10.20.22.2.14'];
-        if (_.any(templateId, function (value) {
-                return _.contains(familyHistoryOrganizer, value);
+        if (_.some(templateId, function (value) {
+                return _.includes(familyHistoryOrganizer, value);
             }) || isInContextOf(familyHistoryOrganizer)) { //Family history organizer
             proto.control.push(new Triplet(node, new Component(resource), templateId));
-        } else if (_.any(templateId, function (value) {
-                return _.contains(resultsOrganizer, value);
+        } else if (_.some(templateId, function (value) {
+                return _.includes(resultsOrganizer, value);
             }) || isInContextOf(resultsOrganizer)) { //Results section with entries optional
             observation = makeAndStore('Observation', null, patient);
             proto.control.push(new Triplet(node, new Component(observation), templateId));
-        } else if (_.any(templateId, function (value) {
-                return _.contains(vitalSignsOrganizer, value);
+        } else if (_.some(templateId, function (value) {
+                return _.includes(vitalSignsOrganizer, value);
             }) || isInContextOf(vitalSignsOrganizer)) { //Vital signs organizer
 
             observation = getResource('Observation', {
@@ -2712,8 +2712,8 @@ var Organizer = function () {
             store2bundle(observation, patient.id);
 
             proto.control.push(new Triplet(node, new Component(observation), templateId));
-        } else if (_.any(templateId, function (value) {
-                return _.contains(genericResultOrganizer, value);
+        } else if (_.some(templateId, function (value) {
+                return _.includes(genericResultOrganizer, value);
             }) && isInContextOf(functionalStatusSection)) { //Functional status section
 
             // Do not create ClinicalImpression
@@ -3313,8 +3313,8 @@ var ClinicalDocument = function (patientId, parserStream) {
             '2.16.840.1.113883.10.20.22.1.9' /* Progress Note */ ,
             '2.16.840.1.113883.10.20.21.1.10' /* Unstructured Document */
         ];
-        if (_.any(templateId, function (value) {
-                return _.contains(validCCDATemplateIds, value);
+        if (_.some(templateId, function (value) {
+                return _.includes(validCCDATemplateIds, value);
             })) {
             proto.control.push(new Triplet(node, new Component(null)));
         } else {

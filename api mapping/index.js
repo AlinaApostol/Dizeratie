@@ -6,10 +6,10 @@ var app = express();
 var fs = require("fs");
 var cors = require('cors');
 var bodyParser = require('body-parser');
+
 require('body-parser-xml')(bodyParser);
 var objToXML = require('object-to-xml');
 var async = require('async');
-var xmlserializer = require('xmlserializer');
 
 app.use(cors());
 app.use(bodyParser.xml({limit: '50mb'}));
@@ -27,32 +27,40 @@ var makeTransactionalBundle = function (bundle, base, patientId) {
 };
 
 app.post('/api/document', function (req, res) {
-    var ccdaDoc = objToXML(req.body);
-
-    async.waterfall([
-        function(callback) {
-            fs.writeFile('trans.xml', ccdaDoc, 'utf-8', (err) => {  
-                if (err) throw err;
-                console.log('CCDA Document saved!');
-                callback(null, fs);
-            });
-            
-        },
-        function(fs, callback) {
-            var istream = fs.createReadStream('trans.xml', 'utf-8');
-            istream
-                .pipe(new parser.CcdaParserStream())
-                .on('data', function (data) {
-                    var bundle = JSON.stringify(makeTransactionalBundle(data), null, '  ');
-                    res.send(bundle);
-                })
-                .on('error', function (error) {
-                    done(error);
+    var bodyarr = []
+    req.on('data', function(chunk){
+      bodyarr.push(chunk);
+    })
+    req.on('end', function(){
+        // console.log( bodyarr.join('') );
+        var ccdaDoc = bodyarr.join('');
+        async.waterfall([
+            function(callback) {
+                fs.writeFile('trans.xml', ccdaDoc, 'utf-8', (err) => {  
+                    if (err) throw err;
+                    console.log('CCDA Document saved!');
+                    callback(null, fs);
                 });
-        }
-    ], function (err, result) {
-        // result now equals 'done'
-    });
+                
+            },
+            function(fs, callback) {
+                var istream = fs.createReadStream('trans.xml', 'utf-8');
+                istream
+                    .pipe(new parser.CcdaParserStream())
+                    .on('data', function (data) {
+                        var bundle = JSON.stringify(makeTransactionalBundle(data), null, '  ');
+                        res.send(bundle);
+                    })
+                    .on('error', function (error) {
+                        done(error);
+                    });
+            }
+        ], function (err, result) {
+            // result now equals 'done'
+        });
+    })
+
+    
 })
 
 var server = app.listen(7202, function () {
