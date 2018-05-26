@@ -29,3 +29,12 @@ html {
 #contCCDA textarea {
   height: 400px;
 }
+
+#copyr {
+  background-color: #eee;
+  height: 25px;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}
