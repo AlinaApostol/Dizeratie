@@ -26,8 +26,15 @@ var makeTransactionalBundle = function (bundle, base, patientId) {
     return bundle;
 };
 
+function parseHrtimeToSeconds(hrtime) {
+    var seconds = (hrtime[0] + (hrtime[1] / 1e9)).toFixed(3);
+    return seconds;
+}
+
 app.post('/api/document', function (req, res) {
-    var bodyarr = []
+    var bodyarr = [];
+    var startTime = process.hrtime();
+    
     req.on('data', function(chunk){
       bodyarr.push(chunk);
     })
@@ -49,6 +56,8 @@ app.post('/api/document', function (req, res) {
                     .pipe(new parser.CcdaParserStream())
                     .on('data', function (data) {
                         var bundle = JSON.stringify(makeTransactionalBundle(data), null, '  ');
+                        var elapsedSeconds = parseHrtimeToSeconds(process.hrtime(startTime));
+                        console.log('Time  : ' + elapsedSeconds + 'seconds');
                         res.send(bundle);
                     })
                     .on('error', function (error) {
